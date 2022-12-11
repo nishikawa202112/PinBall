@@ -46,6 +46,37 @@ public class FripperController : MonoBehaviour
             SetAngle(this.defaultAngle);
         }
 
+        //タッチ操作が行われた時
+        //１箇所目のタップ
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            //タップした時
+            if (touch.phase == TouchPhase.Began)
+            {
+                FlickFripper(touch.position);
+            }
+            //タップが終わった時
+            if (touch.phase == TouchPhase.Ended)
+            {
+                RevertFripper(touch.position);
+            }
+        }
+        //２箇所目のタップ
+        if (Input.touchCount == 2)
+        {
+            Touch touch1 = Input.GetTouch(1);
+            //タップした時
+            if (touch1.phase == TouchPhase.Began)
+            {
+                FlickFripper(touch1.position);
+            }
+            //タップが終わった時
+            if (touch1.phase == TouchPhase.Ended)
+            {
+                RevertFripper(touch1.position);
+            }
+        }
     }
 
     //フリッパーの傾きを設定
@@ -54,5 +85,29 @@ public class FripperController : MonoBehaviour
         JointSpring jointSpr = this.myHingeJoint.spring;
         jointSpr.targetPosition = angle;
         this.myHingeJoint.spring = jointSpr;
+    }
+    //フリッパーをフリック
+    public void FlickFripper(Vector2 pos)
+    {
+        if ((pos.x < Screen.width / 2) && tag == "LeftFripperTag")
+        {
+            SetAngle(this.flickAngle);
+        }
+        if ((pos.x >= Screen.width / 2) && tag == "RightFripperTag")
+        {
+            SetAngle(this.flickAngle);
+        }
+    }
+    //フリッパーを元に戻す
+    public void RevertFripper(Vector2 pos)
+    {
+        if ((pos.x < Screen.width / 2) && tag == "LeftFripperTag")
+        {
+            SetAngle(this.defaultAngle);
+        }
+        if ((pos.x >= Screen.width / 2) && tag == "RightFripperTag")
+        {
+            SetAngle(this.defaultAngle);
+        }
     }
 }
